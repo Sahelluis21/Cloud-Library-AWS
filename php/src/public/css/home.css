@@ -1,0 +1,483 @@
+/* ============================ */
+/* 🌙 CLOUD LIBRARY - HOME PAGE */
+/* ============================ */
+
+/* --------- RESET --------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", "Poppins", sans-serif;
+}
+
+body {
+  background: #101014;
+  color: #f3f3f3;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* --------- CONTAINER --------- */
+.layout-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+/* ============================ */
+/*         SIDEBAR UPGRADE      */
+/* ============================ */
+
+.sidebar {
+  width: 300px;
+  background: #16161b;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border-right: 1px solid #2c2c34;
+}
+
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+}
+
+.user-icon {
+  color: #cfcfcf;
+}
+
+.username-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #eee;
+}
+
+/* Divisor elegante */
+.sidebar-divider {
+  width: 100%;
+  height: 1px;
+  background: #2c2c34;
+  margin: 1.5rem 0;
+}
+
+/* Botões da sidebar */
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  font-size: .95rem;
+  padding: .75rem 1rem;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #ddd;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.nav-btn:hover {
+  background: #23232a;
+}
+
+.nav-btn.active {
+  background: #007bff;
+  color: #fff;
+}
+
+.nav-btn i {
+  font-size: 1.1rem;
+  color: #bbb;
+}
+
+.nav-btn.active i {
+  color: #fff;
+}
+
+/* Seção de armazenamento */
+.storage-section h3,
+.info-section h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: .6rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: #ccc;
+}
+
+/* Barra de progresso */
+.storage-progress {
+  width: 100%;
+  height: 9px;
+  background: #222228;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: .4rem;
+}
+
+.storage-progress-filled {
+  height: 100%;
+  background: linear-gradient(90deg, #0069ff, #4aa3ff);
+  border-radius: 6px;
+}
+
+/* Detalhes de armazenamento */
+.storage-details {
+  font-size: .85rem;
+  color: #aaa;
+}
+
+/* Ajuste da info-section */
+.info-section ul {
+  margin-top: .4rem;
+  padding-left: 1.2rem;
+  color: #bbb;
+  font-size: .85rem;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.info-section li::marker {
+  color: #4aa3ff;
+}
+
+/* ============================ */
+/*        ÁREA PRINCIPAL        */
+/* ============================ */
+
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+}
+
+/* Header alinhado e com espaçamento melhorado */
+.main-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-right: 1rem;
+}
+
+.main-header h1 {
+    font-family: "Montserrat", sans-serif;
+    font-size: 2rem;       /* Ajuste se quiser maior/menor */
+    font-weight: 700;      /* Negrito elegante */
+    letter-spacing: 1px;   /* Espaçamento opcional */
+    color: #ffffff;        /* Caso queira mais destaque */
+    margin-left: 750px; /* Compensa a sidebar para o título realmente ficar CENTRALIZADO */
+}
+
+
+.logout-btn {
+  background: #2d2d36;
+  color: #f3f3f3;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-left: auto; /* garante o canto superior direito */
+}
+
+.logout-btn:hover {
+  background: #3d3d48;
+}
+
+
+/* ============================ */
+/*        DOCUMENTOS / ARQUIVOS */
+/* ============================ */
+
+.documents-container {
+  background: #18181d;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+}
+
+.documents-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-select,
+.upload-button {
+  background: #23232a;
+  border-radius: 8px;
+  border: 1px solid #333;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.7rem;
+}
+
+.upload-button {
+  background: #007bff;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.upload-button:hover {
+  background: #3395ff;
+}
+
+/* ============================ */
+/*   LISTAGEM DE ARQUIVOS      */
+/* ============================ */
+
+.file-table-container {
+  background: #18181d;
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+  overflow-x: auto;
+}
+
+.file-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.75rem;
+}
+
+.file-table thead th {
+  color: #aaa;
+  font-weight: 500;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-bottom: 1px solid #2c2c34;
+}
+
+.file-table tbody tr {
+  background: #202028;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.file-table tbody tr:hover {
+  background: #2a2a34;
+  transform: translateY(-2px);
+}
+
+.file-table td {
+  padding: 0.9rem 0.8rem;
+  font-size: 0.9rem;
+  color: #f3f3f3;
+  vertical-align: middle;
+}
+
+.file-table td:first-child {
+  font-weight: 500;
+  color: #fff;
+}
+
+/* Links de arquivos */
+.file-table td a {
+  color: inherit;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+/* Arredondamento das bordas */
+.file-table tbody tr td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.file-table tbody tr td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* ============================ */
+/*        BOTÕES DE AÇÃO        */
+/* ============================ */
+
+.file-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.file-actions form {
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.file-actions .action-btn,
+.file-actions a.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #25252d;
+  color: #ddd;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.12s;
+}
+
+.file-actions .action-btn:hover,
+.file-actions a.action-btn:hover {
+  transform: scale(1.05);
+  background: #33333d;
+  color: #fff;
+}
+
+.file-table td[data-label="Ações"] {
+  text-align: center;
+}
+
+/* ============================ */
+/*        RESPONSIVIDADE        */
+/* ============================ */
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 230px;
+    padding: 1.5rem;
+  }
+  .main-content {
+    margin-left: 230px;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .layout-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    position: relative;
+    width: 100%;
+    border-bottom: 1px solid #2c2c34;
+  }
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .file-table th,
+  .file-table td {
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+
+  .action-btn {
+    padding: 0.3rem 0.45rem;
+    font-size: 0.8rem;
+  }
+}
+/* ============================ */
+/*      BOTÃO NOVO / UPLOAD    */
+/* ============================ */
+
+.btn-novo-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: #23232a;
+  color: #f3f3f3;
+  
+  padding: 0.55rem 1rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+
+  border: 1px solid #333;
+  border-radius: 12px;
+
+  cursor: pointer;
+  transition: 0.2s ease-out;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.22);
+}
+
+.btn-novo-upload:hover {
+  background: #2d2d36;
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.28);
+}
+
+.btn-novo-upload:active {
+  transform: scale(0.97);
+}
+
+.btn-novo-upload .plus {
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 2px;
+  color: #ffffff;
+}
+
+/* ============================ */
+/*        POP-UPS SIDEBAR        */
+/* ============================ */
+
+#notification-container {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  width: calc(100% - 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: 999;
+}
+
+.notification-popup {
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.9rem;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.4s forwards, fadeOut 0.4s forwards 3s; /* 3s antes de desaparecer */
+}
+
+.notification-upload {
+  background-color: #28a745; /* verde */
+}
+
+.notification-delete {
+  background-color: #dc3545; /* vermelho */
+}
+
+.notification-share {
+  background-color: #ffc107; /* amarelo */
+  color: #000;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
