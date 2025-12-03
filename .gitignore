@@ -1,0 +1,36 @@
+# === TERRAFORM ===
+infra/.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+crash.log
+
+# === DOCKER ===
+*.pid
+*.log
+
+# Evitar subir imagens ou pasta de builds
+*.tar
+*.img
+
+# === PHP ===
+vendor/
+composer.lock
+
+# === NODE (se existir algum JS no projeto) ===
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# === SISTEMA OPERACIONAL ===
+.DS_Store
+Thumbs.db
+
+# === IDEs ===
+.vscode/
+.idea/
+
+# === OUTROS ===
+.env
+.env.*
