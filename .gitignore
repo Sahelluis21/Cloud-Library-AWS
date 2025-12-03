@@ -1,10 +1,9 @@
-# === TERRAFORM ===
-infra/.terraform/
+# Terraform
+*.tfstate
+*.tfstate.*
+.crash
+.terraform/
 .terraform.lock.hcl
-terraform.tfstate
-terraform.tfstate.backup
-crash.log
-
 # === DOCKER ===
 *.pid
 *.log
