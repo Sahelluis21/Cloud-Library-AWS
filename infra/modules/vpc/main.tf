@@ -16,6 +16,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
+
 # PUBLIC SUBNETS
 resource "aws_subnet" "public" {
   count                   = length(var.public_subnets)
@@ -31,7 +32,7 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_route_table" "public" {
-  vpc_id = aws_vcp.main.id
+  vpc_id = aws_vpc.main.id
 
   tags = {
     Name = "${var.project_name}-public-rt"
@@ -65,8 +66,9 @@ resource "aws_subnet" "private" {
 
 # NAT GATEWAY
 resource "aws_eip" "nat_eip" {
-  vpc = true
+  domain = "vpc"
 }
+
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat_eip.id

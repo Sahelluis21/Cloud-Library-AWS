@@ -14,3 +14,16 @@ module "vpc" {
     "10.0.4.0/24"
   ]
 }
+
+module "s3" {
+  source       = "./modules/s3"
+  project_name = "cloud-library"
+}
+
+module "ecr" {
+  source       = "./modules/ecr"
+  project_name = var.project_name
+  image_name   = "cloud-library"
+}
+
+
