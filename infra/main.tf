@@ -1,7 +1,16 @@
-resource "aws_s3_bucket" "test_bucket" {
-  bucket = "sahel-test-bucket-${random_id.suffix.hex}"
-}
+module "vpc" {
+  source = "./modules/vpc"
 
-resource "random_id" "suffix" {
-  byte_length = 4
+  project_name = "cloud-library"
+  vpc_cidr     = "10.0.0.0/16"
+
+  public_subnets = [
+    "10.0.1.0/24",
+    "10.0.2.0/24"
+  ]
+
+  private_subnets = [
+    "10.0.3.0/24",
+    "10.0.4.0/24"
+  ]
 }
