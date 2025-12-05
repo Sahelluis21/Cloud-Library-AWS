@@ -1,10 +1,9 @@
-# security_groups.tf
 
 # ALB SG: permite 80/443 do mundo
 resource "aws_security_group" "alb_sg" {
-  name        = "cloud-library-alb-sg"
+  name        = "${var.project_name}-alb-sg"
   description = "Allow HTTP/HTTPS from internet"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "HTTP"
@@ -30,15 +29,15 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name = "cloud-library-alb-sg"
+    Name = "${var.project_name}-alb-sg"
   }
 }
 
-# ECS SG: permite tráfego apenas vindo do ALB
+# ECS SG: permite tráfego vindo do ALB
 resource "aws_security_group" "ecs_sg" {
-  name        = "cloud-library-ecs-sg"
+  name        = "${var.project_name}-ecs-sg"
   description = "Security group for ECS tasks (allow traffic from ALB)"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description     = "From ALB HTTP"
@@ -56,7 +55,7 @@ resource "aws_security_group" "ecs_sg" {
     security_groups = [aws_security_group.alb_sg.id]
   }
 
-  # Allow outbound to anywhere (e.g., RDS endpoint, S3, Internet via NAT)
+  # Allow outbound traffic (para S3, internet via NAT, RDS, etc)
   egress {
     from_port   = 0
     to_port     = 0
@@ -65,15 +64,15 @@ resource "aws_security_group" "ecs_sg" {
   }
 
   tags = {
-    Name = "cloud-library-ecs-sg"
+    Name = "${var.project_name}-ecs-sg"
   }
 }
 
-# RDS SG: permite 5432 apenas vindos do ECS SG
+# RDS SG: permite 5432 apenas do ECS
 resource "aws_security_group" "rds_sg" {
-  name        = "cloud-library-rds-sg"
+  name        = "${var.project_name}-rds-sg"
   description = "RDS security group; allow Postgres from ECS"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     description     = "Postgres from ECS"
@@ -91,19 +90,6 @@ resource "aws_security_group" "rds_sg" {
   }
 
   tags = {
-    Name = "cloud-library-rds-sg"
+    Name = "${var.project_name}-rds-sg"
   }
-}
-
-# Outputs (úteis para outras configs)
-output "alb_sg_id" {
-  value = aws_security_group.alb_sg.id
-}
-
-output "ecs_sg_id" {
-  value = aws_security_group.ecs_sg.id
-}
-
-output "rds_sg_id" {
-  value = aws_security_group.rds_sg.id
 }

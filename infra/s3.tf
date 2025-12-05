@@ -16,7 +16,7 @@ resource "aws_s3_bucket_public_access_block" "public_block" {
   ignore_public_acls      = true
 }
 
-# Impede ACLs (preferível para segurança moderna)
+# Impede ACLs (moderno)
 resource "aws_s3_bucket_ownership_controls" "ownership_controls" {
   bucket = aws_s3_bucket.main.id
 
@@ -25,11 +25,10 @@ resource "aws_s3_bucket_ownership_controls" "ownership_controls" {
   }
 }
 
-# Política que só permite acesso por ROLE (que será criada na fase ECS)
+# Política mínima: nega acesso público sem HTTPS
 resource "aws_s3_bucket_policy" "bucket_policy" {
   bucket = aws_s3_bucket.main.id
 
-  # Política mínima permitindo acesso APENAS a roles específicas
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

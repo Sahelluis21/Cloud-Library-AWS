@@ -7,8 +7,15 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  # Backend remoto opcional
+  # backend "s3" {
+  #   bucket = "meu-terraform-state"
+  #   key    = "cloud-library/terraform.tfstate"
+  #   region = var.region
+  # }
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
 }
