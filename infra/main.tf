@@ -20,16 +20,7 @@ module "s3" {
   project_name = "cloud-library"
 }
 
-module "ecr" {
-  source = "./modules/ecr"
 
-  repository_name = "cloud-library"
-
-  tags = {
-    Project = "CloudLibrary"
-    Env     = "Prod"
-  }
-}
 
 
 
