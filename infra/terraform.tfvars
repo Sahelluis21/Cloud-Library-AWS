@@ -36,4 +36,4 @@ private_subnets_rds = [
 # --------------------------
 # ECS Container Image
 # --------------------------
-image_url = "791793563745.dkr.ecr.us-east-1.amazonaws.com/cloud-library-php:latest"
+image_url = "791793563745.dkr.ecr.us-east-1.amazonaws.com/cloud-library-nginx-php:latest"

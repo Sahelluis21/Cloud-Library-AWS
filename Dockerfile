@@ -8,17 +8,17 @@ ARG GID=1000
 # Temporariamente root para instalar dependências
 USER root
 
-# Atualiza pacotes e instala dependências + Nginx + Supervisor
+# ---------- Instala dependências, Nginx e Supervisor ----------
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        nginx \
+        supervisor \
         git \
         unzip \
         curl \
         libpq-dev \
         libicu-dev \
         postgresql-client \
-        nginx \
-        supervisor \
     && docker-php-ext-install pdo pdo_pgsql intl \
     && rm -rf /var/lib/apt/lists/*
 
@@ -31,10 +31,10 @@ RUN groupadd -g $GID devgroup \
     && useradd -u $UID -g devgroup -m devuser
 
 # ---------- Configuração Nginx ----------
-# Remove default.conf padrão do Nginx
-RUN rm /etc/nginx/conf.d/default.conf
+# Remove default.conf somente se existir
+RUN [ -f /etc/nginx/conf.d/default.conf ] && rm /etc/nginx/conf.d/default.conf || echo "default.conf não existe"
 
-# Copia arquivo default.conf customizado
+# Copia arquivo default.conf customizado para o local correto do Nginx
 COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Copia certificados (opcional)
