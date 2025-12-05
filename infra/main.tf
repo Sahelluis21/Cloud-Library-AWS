@@ -21,9 +21,15 @@ module "s3" {
 }
 
 module "ecr" {
-  source       = "./modules/ecr"
-  project_name = var.project_name
-  image_name   = "cloud-library"
+  source = "./modules/ecr"
+
+  repository_name = "cloud-library"
+
+  tags = {
+    Project = "CloudLibrary"
+    Env     = "Prod"
+  }
 }
+
 
 

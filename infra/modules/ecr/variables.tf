@@ -1,7 +1,10 @@
-variable "project_name" {
-  type = string
+variable "repository_name" {
+  description = "Nome do repositório ECR público"
+  type        = string
 }
 
-variable "image_name" {
-  type = string
+variable "tags" {
+  description = "Tags do repositório"
+  type        = map(string)
+  default     = {}
 }
