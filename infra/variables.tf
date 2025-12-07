@@ -30,7 +30,16 @@ variable "private_subnets_rds" {
   description = "Lista de CIDRs das subnets privadas para RDS"
 }
 
-variable "image_url" {
+# -------------------------------------------------
+# NOVOS: dois repositórios, um para PHP e outro para Nginx
+# -------------------------------------------------
+
+variable "php_image_url" {
   type        = string
-  description = "URL da imagem do Docker para ECS (ECR ou Docker Hub)"
+  description = "URL da imagem PHP (FPM) no ECR"
+}
+
+variable "nginx_image_url" {
+  type        = string
+  description = "URL da imagem Nginx no ECR"
 }

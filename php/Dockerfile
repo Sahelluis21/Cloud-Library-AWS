@@ -1,49 +1,63 @@
-FROM php:8.1-fpm
+# PHP 8.3 FPM com Debian Bookworm (compatível e sem builds pesados)
+FROM php:8.3-fpm-bookworm
+
+# UID/GID para ambiente local (opcional)
+ARG UID=1000
+ARG GID=1000
 
 USER root
 
 # Instala dependências do sistema
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
     git \
-    unzip \
     curl \
+    zip \
+    unzip \
     libpq-dev \
-    libicu-dev \
-    postgresql-client \
-    && docker-php-ext-install pdo pdo_pgsql intl mbstring tokenizer xml opcache \
-    && rm -rf /var/lib/apt/lists/*
+    libzip-dev \
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-install \
+        pdo \
+        pdo_pgsql \
+        mbstring \
+        zip \
+        intl \
+        xml \
+        opcache \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Instala Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
 
+# Cria usuário não root
+RUN groupadd -g $GID devgroup \
+    && useradd -u $UID -g devgroup -m devuser
+
+# Diretório principal do Laravel
 WORKDIR /var/www/html
 
-# Cria diretórios necessários
-RUN mkdir -p /var/www/html/storage \
+# Cria pastas necessárias
+RUN mkdir -p \
+    /var/www/html/storage \
     /var/www/html/storage/logs \
     /var/www/html/bootstrap/cache \
     /var/www/html/public/uploads
 
-# Ajusta permissões para o PHP-FPM (www-data)
-RUN chown -R www-data:www-data /var/www/html \
+# Permissões
+RUN chown -R devuser:devgroup /var/www/html \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads
 
-# Configura PHP
+# Configurações de PHP para uploads grandes
 RUN { \
-    echo 'upload_max_filesize = 3072M'; \
-    echo 'post_max_size = 3072M'; \
-    echo 'memory_limit = 1024M'; \
-    echo 'max_execution_time = 3600'; \
-    echo 'max_input_time = 3600'; \
+    echo "upload_max_filesize = 3072M"; \
+    echo "post_max_size = 3072M"; \
+    echo "memory_limit = 1024M"; \
+    echo "max_execution_time = 3600"; \
+    echo "max_input_time = 3600"; \
 } > /usr/local/etc/php/conf.d/uploads.ini
 
-# Configura OPcache para produção
-RUN { \
-    echo 'opcache.enable=1'; \
-    echo 'opcache.memory_consumption=256'; \
-    echo 'opcache.max_accelerated_files=20000'; \
-    echo 'opcache.validate_timestamps=0'; \
-} > /usr/local/etc/php/conf.d/opcache.ini
+USER devuser
 
 CMD ["php-fpm"]

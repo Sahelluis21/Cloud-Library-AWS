@@ -1,12 +1,18 @@
+###############################################################
+#  Security Groups - Cloud Library
+#  Configurado para ECS Fargate com 2 containers (nginx + php)
+###############################################################
 
-# ALB SG: permite 80/443 do mundo
+###############################################################
+# ALB Security Group — expõe 80/443 para internet
+###############################################################
 resource "aws_security_group" "alb_sg" {
   name        = "${var.project_name}-alb-sg"
   description = "Allow HTTP/HTTPS from internet"
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "HTTP"
+    description = "Allow HTTP"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -14,7 +20,7 @@ resource "aws_security_group" "alb_sg" {
   }
 
   ingress {
-    description = "HTTPS"
+    description = "Allow HTTPS"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
@@ -33,29 +39,24 @@ resource "aws_security_group" "alb_sg" {
   }
 }
 
-# ECS SG: permite tráfego vindo do ALB
+###############################################################
+# ECS Security Group — só aceita tráfego HTTP vindo do ALB
+###############################################################
 resource "aws_security_group" "ecs_sg" {
   name        = "${var.project_name}-ecs-sg"
-  description = "Security group for ECS tasks (allow traffic from ALB)"
+  description = "Allow only ALB traffic to ECS tasks"
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description     = "From ALB HTTP"
+    description     = "Allow HTTP from ALB"
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
     security_groups = [aws_security_group.alb_sg.id]
   }
 
-  ingress {
-    description     = "From ALB HTTPS"
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id]
-  }
+  # 🚫 Não aceita HTTPS — termina no ALB (SSL offload)
 
-  # Allow outbound traffic (para S3, internet via NAT, RDS, etc)
   egress {
     from_port   = 0
     to_port     = 0
@@ -68,14 +69,16 @@ resource "aws_security_group" "ecs_sg" {
   }
 }
 
-# RDS SG: permite 5432 apenas do ECS
+###############################################################
+# RDS Security Group — só aceita Postgres do ECS
+###############################################################
 resource "aws_security_group" "rds_sg" {
   name        = "${var.project_name}-rds-sg"
-  description = "RDS security group; allow Postgres from ECS"
+  description = "Allow Postgres access only from ECS tasks"
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description     = "Postgres from ECS"
+    description     = "Postgres access from ECS"
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"

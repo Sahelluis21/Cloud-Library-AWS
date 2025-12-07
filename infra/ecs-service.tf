@@ -7,19 +7,22 @@ resource "aws_ecs_service" "app" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = aws_subnet.ecs_private[*].id
-    security_groups = [aws_security_group.ecs_sg.id]
+    subnets          = aws_subnet.ecs_private[*].id
+    security_groups  = [aws_security_group.ecs_sg.id]
     assign_public_ip = false
   }
 
+  # O load balancer sempre aponta para o container NGINX
   load_balancer {
     target_group_arn = aws_lb_target_group.app.arn
-    container_name   = "app"
+    container_name   = "nginx" # <---- ATUALIZADO
     container_port   = 80
   }
 
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
+
+  force_new_deployment = true
 
   depends_on = [
     aws_lb_listener.http,

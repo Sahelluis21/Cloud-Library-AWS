@@ -4,17 +4,17 @@ resource "aws_lb_target_group" "app" {
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
 
-  # Alterar target type para 'ip' para Fargate
+  # Necessário para ECS Fargate
   target_type = "ip"
 
   health_check {
     path                = "/"
     protocol            = "HTTP"
-    matcher             = "200-399"
+    matcher             = "200-399"  
     interval            = 30
-    timeout             = 5
+    timeout             = 10        # <--- AUMENTADO PARA EVITAR FAILING HEALTH CHECK
     healthy_threshold   = 2
-    unhealthy_threshold = 2
+    unhealthy_threshold = 3         # <--- Mais tolerante para evitar derrubar tarefa por instabilidade momentânea
   }
 
   tags = {

@@ -8,24 +8,67 @@ resource "aws_ecs_task_definition" "app" {
   task_role_arn            = data.aws_iam_role.lab_role.arn
 
   container_definitions = jsonencode([
+
+    # -----------------------
+    # CONTAINER PHP-FPM
+    # -----------------------
     {
-      name      = "app"
-      image     = "791793563745.dkr.ecr.us-east-1.amazonaws.com/cloud-library-nginx-php:latest"
-      cpu       = 256
-      memory    = 512
+      name      = "php-fpm"
+      image     = var.php_image_url
       essential = true
+      cpu       = 128
+      memory    = 256
+      workingDirectory = "/var/www/html"
+
+      # PHP-FPM precisa expor a porta 9000 para o Nginx acessar
+      portMappings = [
+        {
+          containerPort = 9000
+          protocol      = "tcp"
+        }
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.ecs_app.name
+          "awslogs-region"        = var.region
+          "awslogs-stream-prefix" = "php"
+        }
+      }
+    },
+
+    # -----------------------
+    # CONTAINER NGINX
+    # -----------------------
+    {
+      name      = "nginx"
+      image     = var.nginx_image_url
+      essential = true
+      cpu       = 128
+      memory    = 256
+
+      dependsOn = [
+        {
+          containerName = "php-fpm"
+          condition     = "START"
+        }
+      ]
+
+      # Nginx expõe a porta externa que ALB vai acessar
       portMappings = [
         {
           containerPort = 80
           protocol      = "tcp"
         }
       ]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.ecs_app.name
-          "awslogs-region"        = "us-east-1"
-          "awslogs-stream-prefix" = "ecs"
+          "awslogs-region"        = var.region
+          "awslogs-stream-prefix" = "nginx"
         }
       }
     }
