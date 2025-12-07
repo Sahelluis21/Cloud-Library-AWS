@@ -1,4 +1,6 @@
-# PHP 8.3 FPM com Debian Bookworm (compatível e sem builds pesados)
+# -----------------------
+# PHP 8.3 FPM com Debian Bookworm
+# -----------------------
 FROM php:8.3-fpm-bookworm
 
 # UID/GID para ambiente local (opcional)
@@ -35,17 +37,20 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 RUN groupadd -g $GID devgroup \
     && useradd -u $UID -g devgroup -m devuser
 
-# Diretório principal do Laravel
+# Define diretório principal do Laravel
 WORKDIR /var/www/html
 
-# Cria pastas necessárias
+# Copia toda a aplicação do host para a imagem
+COPY src/ /var/www/html/
+
+# Cria pastas necessárias que podem não existir
 RUN mkdir -p \
     /var/www/html/storage \
     /var/www/html/storage/logs \
     /var/www/html/bootstrap/cache \
     /var/www/html/public/uploads
 
-# Permissões
+# Ajusta permissões de todas as pastas críticas
 RUN chown -R devuser:devgroup /var/www/html \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/uploads
 
