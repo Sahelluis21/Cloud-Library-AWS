@@ -38,3 +38,8 @@ private_subnets_rds = [
 # --------------------------
 php_image_url   = "791793563745.dkr.ecr.us-east-1.amazonaws.com/cloud-library-php:latest"
 nginx_image_url = "791793563745.dkr.ecr.us-east-1.amazonaws.com/cloud-library-nginx:latest"
+
+db_name       = "cloudlibrary"
+db_user       = "cloudadmin"
+db_password   = "SenhaMUUUUITOsegura123!"
+init_sql_path = "./init.sql"

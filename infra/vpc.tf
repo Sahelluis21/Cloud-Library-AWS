@@ -80,17 +80,15 @@ resource "aws_subnet" "ecs_private" {
 }
 
 # PRIVATE SUBNETS (RDS)
-resource "aws_subnet" "rds_private" {
-  count      = length(var.private_subnets_rds)
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.private_subnets_rds[count.index]
-
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+resource "aws_db_subnet_group" "rds" {
+  name       = "cloud-library-rds-subnet-group"
+  subnet_ids = aws_subnet.ecs_private[*].id
 
   tags = {
-    Name = "${var.project_name}-private-rds-${count.index}"
+    Name = "cloud-library-rds-subnet-group"
   }
 }
+
 
 # --------------------------
 # NAT GATEWAY
@@ -132,9 +130,3 @@ resource "aws_route_table_association" "ecs_private_association" {
   subnet_id      = aws_subnet.ecs_private[count.index].id
 }
 
-# Associate RDS private subnets with private RT
-resource "aws_route_table_association" "rds_private_association" {
-  count          = length(aws_subnet.rds_private)
-  route_table_id = aws_route_table.private.id
-  subnet_id      = aws_subnet.rds_private[count.index].id
-}

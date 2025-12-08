@@ -10,9 +10,7 @@ output "ecs_private_subnets" {
   value = aws_subnet.ecs_private[*].id
 }
 
-output "rds_private_subnets" {
-  value = aws_subnet.rds_private[*].id
-}
+
 
 output "bucket_id" {
   value = aws_s3_bucket.main.id
