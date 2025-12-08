@@ -1,17 +1,18 @@
-FROM nginx:alpine
+FROM nginx:1.27-alpine
 
-# Remove default config
-RUN rm /etc/nginx/conf.d/default.conf
+# Remove default configuration
+RUN rm -f /etc/nginx/conf.d/default.conf
 
-# Adiciona sua config
+# Copy our configuration
 COPY default.conf /etc/nginx/conf.d/default.conf
 
-# Cria diretório da aplicação
-RUN mkdir -p /var/www/html/public
-
-# Define permissões
-RUN chown -R nginx:nginx /var/www/html && \
+# Force ownership (important for ECS)
+RUN mkdir -p /var/www/html/public && \
+    chown -R nginx:nginx /var/www/html && \
     chmod -R 755 /var/www/html
+
+# Ensure no entrypoint scripts override our config
+RUN rm -f /docker-entrypoint.d/*listen-on-ipv6-by-default.sh
 
 EXPOSE 80
 
