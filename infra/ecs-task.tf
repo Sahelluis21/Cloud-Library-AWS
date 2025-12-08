@@ -20,6 +20,9 @@ resource "aws_ecs_task_definition" "app" {
       memory    = 256
       workingDirectory = "/var/www/html"
 
+
+      
+
       # Este container só é acessado internamente pelo Nginx.
       portMappings = [
         {
@@ -47,7 +50,13 @@ resource "aws_ecs_task_definition" "app" {
       essential = true
       cpu       = 128
       memory    = 256
-
+    
+        dependsOn = [
+        {
+          containerName = "php-fpm"
+          condition     = "START"
+        }
+      ]
 
       # Nginx expõe a porta que o ALB irá acessar
       portMappings = [
