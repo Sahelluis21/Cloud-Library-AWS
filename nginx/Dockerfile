@@ -6,9 +6,6 @@ RUN rm /etc/nginx/conf.d/default.conf
 # Adiciona sua config
 COPY default.conf /etc/nginx/conf.d/default.conf
 
-# Copia certificados (serão ignorados no ECS)
-COPY certs/ /etc/nginx/certs/
-
 # Cria diretório da aplicação
 RUN mkdir -p /var/www/html/public
 

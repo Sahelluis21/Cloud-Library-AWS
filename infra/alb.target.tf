@@ -8,13 +8,13 @@ resource "aws_lb_target_group" "app" {
   target_type = "ip"
 
   health_check {
-    path                = "/"
+    path                = "/"          # endpoint mais leve possível
     protocol            = "HTTP"
-    matcher             = "200-399"  
+    matcher             = "200-399"    # aceita qualquer resposta válida
     interval            = 30
-    timeout             = 10        # <--- AUMENTADO PARA EVITAR FAILING HEALTH CHECK
-    healthy_threshold   = 2
-    unhealthy_threshold = 3         # <--- Mais tolerante para evitar derrubar tarefa por instabilidade momentânea
+    timeout             = 10           # evita timeouts falsos
+    healthy_threshold   = 2            # fica saudável rápido
+    unhealthy_threshold = 5            # agora muito mais tolerante
   }
 
   tags = {

@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "app" {
       memory    = 256
       workingDirectory = "/var/www/html"
 
-      # PHP-FPM precisa expor a porta 9000 para o Nginx acessar
+      # Este container só é acessado internamente pelo Nginx.
       portMappings = [
         {
           containerPort = 9000
@@ -31,9 +31,9 @@ resource "aws_ecs_task_definition" "app" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = aws_cloudwatch_log_group.ecs_app.name
-          "awslogs-region"        = var.region
-          "awslogs-stream-prefix" = "php"
+          awslogs-group         = aws_cloudwatch_log_group.ecs_app.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "php"
         }
       }
     },
@@ -48,14 +48,8 @@ resource "aws_ecs_task_definition" "app" {
       cpu       = 128
       memory    = 256
 
-      dependsOn = [
-        {
-          containerName = "php-fpm"
-          condition     = "START"
-        }
-      ]
 
-      # Nginx expõe a porta externa que ALB vai acessar
+      # Nginx expõe a porta que o ALB irá acessar
       portMappings = [
         {
           containerPort = 80
@@ -66,9 +60,9 @@ resource "aws_ecs_task_definition" "app" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = aws_cloudwatch_log_group.ecs_app.name
-          "awslogs-region"        = var.region
-          "awslogs-stream-prefix" = "nginx"
+          awslogs-group         = aws_cloudwatch_log_group.ecs_app.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "nginx"
         }
       }
     }

@@ -12,10 +12,10 @@ resource "aws_ecs_service" "app" {
     assign_public_ip = false
   }
 
-  # O load balancer sempre aponta para o container NGINX
+  # O ALB sempre aponta para o container NGINX (correto!)
   load_balancer {
     target_group_arn = aws_lb_target_group.app.arn
-    container_name   = "nginx" # <---- ATUALIZADO
+    container_name   = "nginx"
     container_port   = 80
   }
 
